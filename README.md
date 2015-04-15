@@ -3,7 +3,7 @@ Apple Swift Strong Type Object Serialization to JSON
 
 # Usage
 
-‘’’
+```
 import XCTest
 
 class Person:Serializable{
@@ -45,4 +45,4 @@ class SerializationTests: XCTestCase {
         XCTAssertEqual(john.toJsonString(), expected,"")
     }
 }
-‘’’
+```
