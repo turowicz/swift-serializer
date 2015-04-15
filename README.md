@@ -6,7 +6,7 @@ Apple Swift Strong Type Object Serialization to JSON
 ```swift
 import XCTest
 
-class Person:Serializable{
+class Person:Serializable {
     var Name : String
     var Surname : String
     var Animals : Array<Animal>
