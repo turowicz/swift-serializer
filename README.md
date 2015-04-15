@@ -3,7 +3,7 @@ Apple Swift Strong Type Object Serialization to JSON
 
 # Usage
 
-```
+```swift
 import XCTest
 
 class Person:Serializable{
@@ -37,9 +37,7 @@ class SerializationTests: XCTestCase {
         
         println(john.toJson()) //will give binary data to include in HTTP Body
         println(john.toJsonString()) //will give the exact string in JSON
-        
-        //{"Surname":"Doe","Name":"John","Animals":[{"Kind":"Dog","Nickname":"Fluffy"},{"Kind":"Cat","Nickname":"Purry"}]}
-        
+
         var expected = "{\"Surname\":\"Doe\",\"Name\":\"John\",\"Animals\":[{\"Kind\":\"Dog\",\"Nickname\":\"Fluffy\"},{\"Kind\":\"Cat\",\"Nickname\":\"Purry\"}]}";
         
         XCTAssertEqual(john.toJsonString(), expected,"")
