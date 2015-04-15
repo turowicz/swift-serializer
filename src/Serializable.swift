@@ -3,7 +3,7 @@
     Converts A class to a dictionary, used for serializing dictionaries to JSON
 
     Supported objects:
-    - Serializable derived classes
+    - Serializable derived classes (sub classes)
     - Arrays of Serializable
     - NSData
     - String, Numeric, and all other NSJSONSerialization supported objects
