@@ -51,10 +51,6 @@ public class Serializable : NSObject{
     
     public func toJson() -> NSData {
         var dictionary = self.toDictionary()
-        //println(dictionary)
-        
-        // Disable logging requests as the app can be sending images (the request would be in tens of MBs)
-//        NSNotificationCenter.defaultCenter().postNotificationName("CrashlyticsLogNotification", object: self, userInfo: ["string": "serialized dict: \(dictionary)"])
         
         var err: NSError?
         if let json = NSJSONSerialization.dataWithJSONObject(dictionary, options:NSJSONWritingOptions(0), error: &err) {
