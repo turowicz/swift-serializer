@@ -44,3 +44,6 @@ class SerializationTests: XCTestCase {
     }
 }
 ```
+
+# Swift Serializer
+We will accept all valid Pull Requests, Feature Requests and any other Issues made on this project. Any questions just ask.
