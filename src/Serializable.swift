@@ -34,6 +34,12 @@ public class Serializable : NSObject{
                     subArray.append(item.toDictionary())
                 }
                 propertiesDictionary.setValue(subArray, forKey: propName)
+            } else if propValue is Double {
+                propertiesDictionary.setValue((propValue as Double), forKey: propName)
+            } else if propValue is Int {
+                propertiesDictionary.setValue((propValue as Int), forKey: propName)
+            } else if propValue is Float {
+                propertiesDictionary.setValue((propValue as Float), forKey: propName)
             } else if propValue is NSData {
                 propertiesDictionary.setValue((propValue as NSData).base64EncodedStringWithOptions(nil), forKey: propName)
             } else if propValue is Bool {
