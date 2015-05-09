@@ -21,24 +21,26 @@ class Person:Serializable {
 class Animal:Serializable {
     var Nickname : String
     var Kind : String
-    
-    init(Nickname : String, Kind : String) {
+    var Trick : String?
+
+    init(Nickname : String, Kind : String, Trick : String?) {
         self.Nickname = Nickname
         self.Kind = Kind
+        self.Trick = Trick
     }
 }
 
 class SerializationTests: XCTestCase {
     func test_serialization_works() {
         var john = Person(Name: "John", Surname: "Doe")
-    
-        john.Animals.append(Animal(Nickname: "Fluffy", Kind: "Dog"))
-        john.Animals.append(Animal(Nickname: "Purry", Kind: "Cat"))
+        
+        john.Animals.append(Animal(Nickname: "Fluffy", Kind: "Dog", Trick: "Rollover"))
+        john.Animals.append(Animal(Nickname: "Purry", Kind: "Cat", Trick: nil))
         
         println(john.toJson()) //will give binary data to include in HTTP Body
         println(john.toJsonString()) //will give the exact string in JSON
-
-        var expected = "{\"Surname\":\"Doe\",\"Name\":\"John\",\"Animals\":[{\"Kind\":\"Dog\",\"Nickname\":\"Fluffy\"},{\"Kind\":\"Cat\",\"Nickname\":\"Purry\"}]}";
+        
+        var expected = "{\"Surname\":\"Doe\",\"Name\":\"John\",\"Animals\":[{\"Trick\":\"Rollover\",\"Kind\":\"Dog\",\"Nickname\":\"Fluffy\"},{\"Kind\":\"Cat\",\"Nickname\":\"Purry\"}]}";
         
         XCTAssertEqual(john.toJsonString(), expected,"")
     }
