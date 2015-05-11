@@ -38,6 +38,8 @@ public class Serializable : NSObject{
                 propertiesDictionary.setValue((propValue as Double), forKey: propName)
             } else if propValue is Int {
                 propertiesDictionary.setValue((propValue as Int), forKey: propName)
+            } else if propValue is Int64 {
+                propertiesDictionary.setValue((propValue as NSNumber), forKey: propName)
             } else if propValue is Float {
                 propertiesDictionary.setValue((propValue as Float), forKey: propName)
             } else if propValue is NSData {
