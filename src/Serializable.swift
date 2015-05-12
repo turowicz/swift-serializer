@@ -13,47 +13,48 @@
 import Foundation
 
 public class Serializable : NSObject{
-    
+    // http://stackoverflow.com/questions/27989094/how-to-unwrap-an-optional-value-from-any-type
+    func unwrap(any:Any) -> Any? {
+        let mi = reflect(any)
+        if mi.disposition != .Optional {
+            return any
+        }
+
+        // Optional.None
+        if mi.count == 0 {
+            return nil
+        }
+
+        let (_,some) = mi[0]
+        return some.value
+    }
+
     public func toDictionary() -> NSDictionary {
-        var aClass : AnyClass? = self.dynamicType
-        var propertiesCount : CUnsignedInt = 0
-        let propertiesInAClass : UnsafeMutablePointer<objc_property_t> = class_copyPropertyList(aClass, &propertiesCount)
-        var propertiesDictionary : NSMutableDictionary = NSMutableDictionary()
-   
-        for var i = 0; i < Int(propertiesCount); i++ {
-            var property = propertiesInAClass[i]
-            var propName = NSString(CString: property_getName(property), encoding: NSUTF8StringEncoding)!
-            var propType = property_getAttributes(property)
-            var propValue : AnyObject! = self.valueForKey(propName);
-            
-            if propValue is Serializable {
-                propertiesDictionary.setValue((propValue as Serializable).toDictionary(), forKey: propName)
-            } else if propValue is Array<Serializable> {
-                var subArray = Array<NSDictionary>()
-                for item in (propValue as Array<Serializable>) {
-                    subArray.append(item.toDictionary())
+        var propertiesDictionary = NSMutableDictionary()
+        var mirror = reflect(self);
+        for i in 1..<(mirror.count) {
+            let (propName, childMirror) = mirror[i]
+            if let propValue:AnyObject = unwrap(childMirror.value) as? AnyObject {
+                if let serializeablePropValue = propValue as? Serializable {
+                    propertiesDictionary.setValue(serializeablePropValue.toDictionary(), forKey: propName)
+                } else if let arrayPropValue = propValue as? Array<Serializable> {
+                    var subArray = Array<NSDictionary>()
+                    for item in arrayPropValue {
+                        subArray.append(item.toDictionary())
+                    }
+                    propertiesDictionary.setValue(subArray, forKey: propName)
+                } else if propValue is Int || propValue is Double || propValue is Float {
+                    propertiesDictionary.setValue(propValue, forKey: propName)
+                } else if let dataPropValue = propValue as? NSData {
+                    propertiesDictionary.setValue(dataPropValue.base64EncodedStringWithOptions(nil), forKey: propName)
+                } else if let boolPropValue = propValue as? Bool {
+                    propertiesDictionary.setValue(boolPropValue.boolValue, forKey: propName)
+                } else {
+                    propertiesDictionary.setValue(propValue, forKey: propName)
                 }
-                propertiesDictionary.setValue(subArray, forKey: propName)
-            } else if propValue is Double {
-                propertiesDictionary.setValue((propValue as Double), forKey: propName)
-            } else if propValue is Int {
-                propertiesDictionary.setValue((propValue as Int), forKey: propName)
-            } else if propValue is Int64 {
-                propertiesDictionary.setValue((propValue as NSNumber), forKey: propName)
-            } else if propValue is Float {
-                propertiesDictionary.setValue((propValue as Float), forKey: propName)
-            } else if propValue is NSData {
-                propertiesDictionary.setValue((propValue as NSData).base64EncodedStringWithOptions(nil), forKey: propName)
-            } else if propValue is Bool {
-                propertiesDictionary.setValue((propValue as Bool).boolValue, forKey: propName)
-            } else {
-                propertiesDictionary.setValue(propValue, forKey: propName)
             }
         }
-        
-        // class_copyPropertyList retaints all the 
-        propertiesInAClass.dealloc(Int(propertiesCount))
-        
+
         return propertiesDictionary
     }
     
