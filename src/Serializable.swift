@@ -56,19 +56,21 @@ public class Serializable: NSObject {
     
         :returns: The class as JSON, wrapped in NSData.
     */
-    public func toJson() -> NSData {
+    public func toJson() -> NSData? {
         let dictionary = self.toDictionary()
         
-        var err: NSError?
-        
-        if let json = NSJSONSerialization.dataWithJSONObject(dictionary, options: .PrettyPrinted, error: &err) {
-            return json
-        } else {
-            let error = err?.description ?? "nil"
-            print("ERROR: Unable to serialize json, error: \(error)")
-            NSNotificationCenter.defaultCenter().postNotificationName("CrashlyticsLogNotification", object: self, userInfo: ["string": "unable to serialize json, error: \(error)"])
-            abort()
+        if NSJSONSerialization.isValidJSONObject(dictionary) {
+            do {
+                let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: .PrettyPrinted)
+                return json
+            } catch {
+                //currently swift will not catch NSInvalidArgumentException exception
+                print("ERROR: Unable to serialize json, error: \(error)")
+                NSNotificationCenter.defaultCenter().postNotificationName("CrashlyticsLogNotification", object: self, userInfo: ["string": "unable to serialize json, error: \(error)"])
+            }
         }
+        
+        return nil
     }
     
     /**
@@ -76,8 +78,12 @@ public class Serializable: NSObject {
     
         :returns: The class as a JSON string.
     */
-    public func toJsonString() -> String! {
-        return NSString(data: self.toJson(), encoding: NSUTF8StringEncoding) as String!
+    public func toJsonString() -> String? {
+        if let jsonData = self.toJson() {
+            return NSString(data: jsonData, encoding: NSUTF8StringEncoding) as String?
+        }
+        
+        return nil
     }
 }
 
