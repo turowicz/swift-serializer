@@ -56,12 +56,12 @@ public class Serializable: NSObject {
     
         :returns: The class as JSON, wrapped in NSData.
     */
-    public func toJson() -> NSData? {
+    public func toJson(prettyPrinted : Bool = false) -> NSData? {
         let dictionary = self.toDictionary()
         
         if NSJSONSerialization.isValidJSONObject(dictionary) {
             do {
-                let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: .PrettyPrinted)
+                let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: (prettyPrinted ? .PrettyPrinted : NSJSONWritingOptions()))
                 return json
             } catch {
                 //currently swift will not catch NSInvalidArgumentException exception
@@ -78,8 +78,8 @@ public class Serializable: NSObject {
     
         :returns: The class as a JSON string.
     */
-    public func toJsonString() -> String? {
-        if let jsonData = self.toJson() {
+    public func toJsonString(prettyPrinted : Bool = false) -> String? {
+        if let jsonData = self.toJson(prettyPrinted) {
             return NSString(data: jsonData, encoding: NSUTF8StringEncoding) as String?
         }
         
