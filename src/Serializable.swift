@@ -24,8 +24,7 @@ public class Serializable: NSObject {
         let mirror = Mirror(reflecting: self)
 
         for (propName, propValue) in mirror.children {
-
-            if let propValue: AnyObject = propValue as? AnyObject, propName = propName {
+            if let propValue: AnyObject = self.unwrap(propValue) as? AnyObject, propName = propName {
                 if let serializablePropValue = propValue as? Serializable {
                     propertiesDictionary.setValue(serializablePropValue.toDictionary(), forKey: propName)
                 } else if let arrayPropValue = propValue as? [Serializable] {
@@ -82,5 +81,30 @@ public class Serializable: NSObject {
         }
 
         return nil
+    }
+
+}
+
+extension Serializable {
+
+    /**
+    Unwraps 'any' object. See http://stackoverflow.com/questions/27989094/how-to-unwrap-an-optional-value-from-any-type
+
+    :returns: The unwrapped object.
+    */
+    private func unwrap(any: Any) -> Any? {
+        let mi = Mirror(reflecting: any)
+
+        if mi.displayStyle != .Optional {
+            return any
+        }
+
+        if mi.children.count == 0 {
+            return nil
+        }
+
+        let (_, some) = mi.children.first!
+
+        return some
     }
 }
