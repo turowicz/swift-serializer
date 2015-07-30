@@ -90,7 +90,7 @@ extension Serializable {
     /**
     Unwraps 'any' object. See http://stackoverflow.com/questions/27989094/how-to-unwrap-an-optional-value-from-any-type
 
-    :returns: The unwrapped object.
+    - returns: The unwrapped object.
     */
     private func unwrap(any: Any) -> Any? {
         let mi = Mirror(reflecting: any)
