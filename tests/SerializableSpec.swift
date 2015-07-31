@@ -69,7 +69,7 @@ class SerializableSpec: QuickSpec {
             }
             
             it("should be serialized") {
-                let expected = "{\"BirthTimestamp\":51246360,\"Surname\":\"Doe\",\"Animals\":[],\"Name\":\"John\"}";
+                let expected = "{\"BirthTimestamp\":51246360,\"Name\":\"John\",\"Animals\":[],\"Surname\":\"Doe\"}";
                 expect(john.toJsonString()).to(equal(expected))
             }
         }
@@ -84,7 +84,7 @@ class SerializableSpec: QuickSpec {
             }
             
             it("should be serialized") {
-                let expected = "{\"BirthTimestamp\":51246360,\"Surname\":\"Doe\",\"Animals\":[{\"Trick\":\"Rollover\",\"Nickname\":\"Fluffy\",\"Kind\":\"Dog\"},{\"Nickname\":\"Purry\",\"Kind\":\"Cat\"}],\"Name\":\"John\"}";
+                let expected = "{\"BirthTimestamp\":51246360,\"Name\":\"John\",\"Animals\":[{\"Trick\":\"Rollover\",\"Kind\":\"Dog\",\"Nickname\":\"Fluffy\"},{\"Kind\":\"Cat\",\"Nickname\":\"Purry\"}],\"Surname\":\"Doe\"}";
                 expect(john.toJsonString()).to(equal(expected))
             }
         }
