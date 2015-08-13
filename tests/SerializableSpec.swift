@@ -37,6 +37,34 @@ class Animal:Serializable {
     }
 }
 
+class Stock:Serializable {
+    var Price : Int8
+    var PE : Int16
+    var Volume : Int32
+    var MarketCap : Int64
+    
+    init(Price : Int8, PE : Int16, Volume : Int32, MarketCap : Int64) {
+        self.Price = Price
+        self.PE = PE
+        self.Volume = Volume
+        self.MarketCap = MarketCap
+    }
+}
+
+class UnsignedStock:Serializable {
+    var Price : UInt8
+    var PE : UInt16
+    var Volume : UInt32
+    var MarketCap : UInt64
+    
+    init(Price : UInt8, PE : UInt16, Volume : UInt32, MarketCap : UInt64) {
+        self.Price = Price
+        self.PE = PE
+        self.Volume = Volume
+        self.MarketCap = MarketCap
+    }
+}
+
 class SerializableSpec: QuickSpec {
     override func spec() {
         describe("OneProperty") {
@@ -86,6 +114,31 @@ class SerializableSpec: QuickSpec {
             it("should be serialized") {
                 let expected = "{\"BirthTimestamp\":51246360,\"Name\":\"John\",\"Animals\":[{\"Trick\":\"Rollover\",\"Kind\":\"Dog\",\"Nickname\":\"Fluffy\"},{\"Kind\":\"Cat\",\"Nickname\":\"Purry\"}],\"Surname\":\"Doe\"}";
                 expect(john.toJsonString()).to(equal(expected))
+            }
+        }
+        
+        describe("Stock") {
+            var stock : Stock!
+            
+            beforeEach {
+                stock = Stock(Price: 15, PE: 55, Volume: 100000, MarketCap: 1000000)
+            }
+            
+            it("should serialize signed integer types") {
+                let expected = "{\"Volume\":100000,\"MarketCap\":1000000,\"PE\":55,\"Price\":15}";
+                expect(stock.toJsonString()).to(equal(expected))
+            }
+        }
+        describe("Unsigned Stock") {
+            var stock : UnsignedStock!
+            
+            beforeEach {
+                stock = UnsignedStock(Price: 15, PE: 55, Volume: 100000, MarketCap: 1000000)
+            }
+            
+            it("should serialize unsigned integer types") {
+                let expected = "{\"Volume\":100000,\"MarketCap\":1000000,\"PE\":55,\"Price\":15}";
+                expect(stock.toJsonString()).to(equal(expected))
             }
         }
     }

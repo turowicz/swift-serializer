@@ -44,6 +44,30 @@ public class Serializable: NSObject {
                     propertiesDictionary.setValue(propValue, forKey: propName)
                 }
             }
+            else if let propValue:Int8 = propValue as? Int8 {
+                propertiesDictionary.setValue(NSNumber(char: propValue), forKey: propName!)
+            }
+            else if let propValue:Int16 = propValue as? Int16 {
+                propertiesDictionary.setValue(NSNumber(short: propValue), forKey: propName!)
+            }
+            else if let propValue:Int32 = propValue as? Int32 {
+                propertiesDictionary.setValue(NSNumber(int: propValue), forKey: propName!)
+            }
+            else if let propValue:Int64 = propValue as? Int64 {
+                propertiesDictionary.setValue(NSNumber(longLong: propValue), forKey: propName!)
+            }
+            else if let propValue:UInt8 = propValue as? UInt8 {
+                propertiesDictionary.setValue(NSNumber(unsignedChar: propValue), forKey: propName!)
+            }
+            else if let propValue:UInt16 = propValue as? UInt16 {
+                propertiesDictionary.setValue(NSNumber(unsignedShort: propValue), forKey: propName!)
+            }
+            else if let propValue:UInt32 = propValue as? UInt32 {
+                propertiesDictionary.setValue(NSNumber(unsignedInt: propValue), forKey: propName!)
+            }
+            else if let propValue:UInt64 = propValue as? UInt64 {
+                propertiesDictionary.setValue(NSNumber(unsignedLongLong: propValue), forKey: propName!)
+            }
         }
 
         return propertiesDictionary
