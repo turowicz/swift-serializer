@@ -40,6 +40,8 @@ public class Serializable: NSObject {
                     propertiesDictionary.setValue(propValue, forKey: propName)
                 } else if let dataPropValue = propValue as? NSData {
                     propertiesDictionary.setValue(dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
+                } else if let datePropValue = propValue as? NSDate {
+                  propertiesDictionary.setValue(datePropValue.timeIntervalSince1970, forKey: propName)
                 } else if let boolPropValue = propValue as? Bool {
                     propertiesDictionary.setValue(boolPropValue, forKey: propName)
                 } else {
