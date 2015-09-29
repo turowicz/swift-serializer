@@ -86,7 +86,7 @@ public class Serializable: NSObject {
                 let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: (prettyPrinted ? .PrettyPrinted : NSJSONWritingOptions()))
                 return json
             } catch let error as NSError {
-                print("ERROR: Unable to serialize json, error: \(error)", appendNewline: true)
+                print("ERROR: Unable to serialize json, error: \(error)")
                 NSNotificationCenter.defaultCenter().postNotificationName("CrashlyticsLogNotification", object: self, userInfo: ["string": "unable to serialize json, error: \(error)"])
             }
         }
