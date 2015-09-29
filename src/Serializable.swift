@@ -106,11 +106,8 @@ public class Serializable: NSObject {
 
         return nil
     }
-
-}
-
-extension Serializable {
-
+    
+    
     /**
     Unwraps 'any' object. See http://stackoverflow.com/questions/27989094/how-to-unwrap-an-optional-value-from-any-type
 
