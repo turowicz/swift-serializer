@@ -13,7 +13,19 @@ Supported objects:
 import Foundation
 
 public class Serializable: NSObject {
-
+    
+    public func formatKey(key: String) -> String {
+        return key
+    }
+    
+    public func formatValue(value: AnyObject?, forKey: String) -> AnyObject? {
+        return value
+    }
+    
+    func setValue(dictionary: NSDictionary, value: AnyObject?, forKey: String) {
+        dictionary.setValue(formatValue(value, forKey: forKey), forKey: formatKey(forKey))
+    }
+    
     /**
     Converts the class to a dictionary.
 
@@ -26,47 +38,47 @@ public class Serializable: NSObject {
         for (propName, propValue) in mirror.children {
             if let propValue: AnyObject = self.unwrap(propValue) as? AnyObject, propName = propName {
                 if let serializablePropValue = propValue as? Serializable {
-                    propertiesDictionary.setValue(serializablePropValue.toDictionary(), forKey: propName)
+                    setValue(propertiesDictionary, value: serializablePropValue.toDictionary(), forKey: propName)
                 } else if let arrayPropValue = propValue as? [Serializable] {
                     var subArray = [NSDictionary]()
                     for item in arrayPropValue {
                         subArray.append(item.toDictionary())
                     }
-
-                    propertiesDictionary.setValue(subArray, forKey: propName)
+                    
+                    setValue(propertiesDictionary, value: subArray, forKey: propName)
                 } else if propValue is Int || propValue is Double || propValue is Float {
-                    propertiesDictionary.setValue(propValue, forKey: propName)
+                    setValue(propertiesDictionary, value: propValue, forKey: propName)
                 } else if let dataPropValue = propValue as? NSData {
-                    propertiesDictionary.setValue(dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
+                    setValue(propertiesDictionary, value: dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
                 } else if let boolPropValue = propValue as? Bool {
-                    propertiesDictionary.setValue(boolPropValue, forKey: propName)
+                    setValue(propertiesDictionary, value: boolPropValue, forKey: propName)
                 } else {
-                    propertiesDictionary.setValue(propValue, forKey: propName)
+                    setValue(propertiesDictionary, value: propValue, forKey: propName)
                 }
             }
             else if let propValue:Int8 = propValue as? Int8 {
-                propertiesDictionary.setValue(NSNumber(char: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(char: propValue), forKey: propName!)
             }
             else if let propValue:Int16 = propValue as? Int16 {
-                propertiesDictionary.setValue(NSNumber(short: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(short: propValue), forKey: propName!)
             }
             else if let propValue:Int32 = propValue as? Int32 {
-                propertiesDictionary.setValue(NSNumber(int: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(int: propValue), forKey: propName!)
             }
             else if let propValue:Int64 = propValue as? Int64 {
-                propertiesDictionary.setValue(NSNumber(longLong: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(longLong: propValue), forKey: propName!)
             }
             else if let propValue:UInt8 = propValue as? UInt8 {
-                propertiesDictionary.setValue(NSNumber(unsignedChar: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(unsignedChar: propValue), forKey: propName!)
             }
             else if let propValue:UInt16 = propValue as? UInt16 {
-                propertiesDictionary.setValue(NSNumber(unsignedShort: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(unsignedShort: propValue), forKey: propName!)
             }
             else if let propValue:UInt32 = propValue as? UInt32 {
-                propertiesDictionary.setValue(NSNumber(unsignedInt: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(unsignedInt: propValue), forKey: propName!)
             }
             else if let propValue:UInt64 = propValue as? UInt64 {
-                propertiesDictionary.setValue(NSNumber(unsignedLongLong: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(unsignedLongLong: propValue), forKey: propName!)
             }
         }
 
