@@ -25,7 +25,6 @@ extension Array where Element: Serializable {
             } catch {
                 //currently swift will not catch NSInvalidArgumentException exception
                 print("ERROR: Unable to serialize json, error: \(error)")
-                NSNotificationCenter.defaultCenter().postNotificationName("CrashlyticsLogNotification", object: self, userInfo: ["string": "unable to serialize json, error: \(error)"])
             }
         }
         
