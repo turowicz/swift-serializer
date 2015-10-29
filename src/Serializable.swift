@@ -21,31 +21,31 @@ public class Serializable: NSObject {
     */
     public func toDictionary() -> NSDictionary {
         let propertiesDictionary = NSMutableDictionary()
-        let mirror = reflect(self)
+        let mirror = Mirror(reflecting: self)
         
-        for i in 1..<mirror.count {
-            let (propName, childMirror) = mirror[i]
+        for childMirror in mirror.children {
+            let propName = childMirror.label
             
             if let propValue: AnyObject = self.unwrap(childMirror.value) as? AnyObject {
                 if let serializablePropValue = propValue as? Serializable {
-                    propertiesDictionary.setValue(serializablePropValue.toDictionary(), forKey: propName)
+                    propertiesDictionary.setValue(serializablePropValue.toDictionary(), forKey: propName!)
                 } else if let arrayPropValue = propValue as? [Serializable] {
                     var subArray = [NSDictionary]()
                     for item in arrayPropValue {
                         subArray.append(item.toDictionary())
                     }
                     
-                    propertiesDictionary.setValue(subArray, forKey: propName)
+                    propertiesDictionary.setValue(subArray, forKey: propName!)
                 } else if propValue is Int || propValue is Double || propValue is Float {
-                    propertiesDictionary.setValue(propValue, forKey: propName)
+                    propertiesDictionary.setValue(propValue, forKey: propName!)
                 } else if let dataPropValue = propValue as? NSData {
-                    propertiesDictionary.setValue(dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
+                    propertiesDictionary.setValue(dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName!)
                 } else if let datePropValue = propValue as? NSDate {
-                  propertiesDictionary.setValue(datePropValue.timeIntervalSince1970, forKey: propName)
+                    propertiesDictionary.setValue(datePropValue.timeIntervalSince1970, forKey: propName!)
                 } else if let boolPropValue = propValue as? Bool {
-                    propertiesDictionary.setValue(boolPropValue, forKey: propName)
+                    propertiesDictionary.setValue(boolPropValue, forKey: propName!)
                 } else {
-                    propertiesDictionary.setValue(propValue, forKey: propName)
+                    propertiesDictionary.setValue(propValue, forKey: propName!)
                 }
             }
         }
@@ -96,19 +96,15 @@ extension Serializable {
     
         :returns: The unwrapped object.
     */
-    private func unwrap(any: Any) -> Any? {
-        let mi = reflect(any)
+    func unwrap(any:Any) -> Any {
         
-        if mi.disposition != .Optional {
+        let mi = Mirror(reflecting: any)
+        if mi.displayStyle != .Optional {
             return any
         }
         
-        if mi.count == 0 {
-            return nil
-        }
-        
-        let (_, some) = mi[0]
-        
-        return some.value
+        if mi.children.count == 0 { return NSNull() }
+        let (_, some) = mi.children.first!
+        return some
     }
 }
