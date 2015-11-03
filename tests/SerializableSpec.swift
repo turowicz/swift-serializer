@@ -1,6 +1,7 @@
 
 import Quick
 import Nimble
+import SwiftSerializer
 
 class OneProperty : Serializable {
     var name : String
