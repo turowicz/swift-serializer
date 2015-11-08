@@ -98,7 +98,7 @@ class SerializableSpec: QuickSpec {
             }
             
             it("should be serialized") {
-                let expected = "{\"BirthTimestamp\":51246360,\"Name\":\"John\",\"Animals\":[],\"Surname\":\"Doe\"}";
+                let expected = "{\"Animals\":[],\"BirthTimestamp\":51246360,\"Name\":\"John\",\"Surname\":\"Doe\"}";
                 expect(john.toJsonString()).to(equal(expected))
             }
         }
@@ -113,7 +113,7 @@ class SerializableSpec: QuickSpec {
             }
             
             it("should be serialized") {
-                let expected = "{\"BirthTimestamp\":51246360,\"Name\":\"John\",\"Animals\":[{\"Trick\":\"Rollover\",\"Kind\":\"Dog\",\"Nickname\":\"Fluffy\"},{\"Kind\":\"Cat\",\"Nickname\":\"Purry\"}],\"Surname\":\"Doe\"}";
+                let expected = "{\"Animals\":[{\"Kind\":\"Dog\",\"Nickname\":\"Fluffy\",\"Trick\":\"Rollover\"},{\"Kind\":\"Cat\",\"Nickname\":\"Purry\"}],\"BirthTimestamp\":51246360,\"Name\":\"John\",\"Surname\":\"Doe\"}";
                 expect(john.toJsonString()).to(equal(expected))
             }
         }
@@ -126,10 +126,11 @@ class SerializableSpec: QuickSpec {
             }
             
             it("should serialize signed integer types") {
-                let expected = "{\"Volume\":100000,\"MarketCap\":1000000,\"PE\":55,\"Price\":15}";
+                let expected = "{\"MarketCap\":1000000,\"PE\":55,\"Price\":15,\"Volume\":100000}";
                 expect(stock.toJsonString()).to(equal(expected))
             }
         }
+        
         describe("Unsigned Stock") {
             var stock : UnsignedStock!
             
@@ -138,7 +139,7 @@ class SerializableSpec: QuickSpec {
             }
             
             it("should serialize unsigned integer types") {
-                let expected = "{\"Volume\":100000,\"MarketCap\":1000000,\"PE\":55,\"Price\":15}";
+                let expected = "{\"MarketCap\":1000000,\"PE\":55,\"Price\":15,\"Volume\":100000}";
                 expect(stock.toJsonString()).to(equal(expected))
             }
         }

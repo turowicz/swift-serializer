@@ -13,6 +13,27 @@ Supported objects:
 import Foundation
 
 public class Serializable: NSObject {
+    private class SortedDictionary : NSMutableDictionary {
+        var dictionary = [String: AnyObject]()
+        
+        override var count : Int {
+            return dictionary.count
+        }
+        
+        override func keyEnumerator() -> NSEnumerator {
+            let sortedKeys : NSArray = dictionary.keys.sort()
+            return sortedKeys.objectEnumerator()
+        }
+        
+        override func setValue(value: AnyObject?, forKey key: String) {
+            dictionary[key] = value
+        }
+        
+        override func objectForKey(aKey: AnyObject) -> AnyObject? {
+            return dictionary[aKey as! String]
+        }        
+    }
+    
     
     public func formatKey(key: String) -> String {
         return key
@@ -32,7 +53,7 @@ public class Serializable: NSObject {
     - returns: The class as an NSDictionary.
     */
     public func toDictionary() -> NSDictionary {
-        let propertiesDictionary = NSMutableDictionary()
+        let propertiesDictionary = SortedDictionary()
         let mirror = Mirror(reflecting: self)
         for (propName, propValue) in mirror.children {
             if let propValue: AnyObject = self.unwrap(propValue) as? AnyObject, propName = propName {
