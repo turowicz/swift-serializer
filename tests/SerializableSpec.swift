@@ -126,7 +126,7 @@ class SerializableSpec: QuickSpec {
             }
             
             it("should serialize signed integer types") {
-                let expected = "{\"MarketCap\":1000000,\"PE\":55,\"Price\":15,\"Volume\":100000}";
+                let expected = "{\"MarketCap\":100000,\"PE\":55,\"Price\":15,\"Volume\":100000}";
                 expect(stock.toJsonString()).to(equal(expected))
             }
         }
