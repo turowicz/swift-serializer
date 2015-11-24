@@ -1,6 +1,6 @@
 # Swift Serializer
 
-[![Build Status](https://travis-ci.org/Mailcloud/swift-serializer.svg?branch=master)](https://travis-ci.org/Mailcloud/swift-serializer)
+[![Build Status](https://travis-ci.org/Mailcloud/swift-serializer.svg?branch=master)](https://travis-ci.org/Mailcloud/swift-serializer) [![codecov.io](https://codecov.io/github/Mailcloud/swift-serializer/coverage.svg?branch=master)](https://codecov.io/github/Mailcloud/swift-serializer?branch=master)
 
 Apple Swift Strong Type Object Serialization to JSON
 
