@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AA949BC61BE8630800F02242"
+               BlueprintIdentifier = "AA949BD71BE8649C00F02242"
                BuildableName = "SwiftSerializer.framework"
                BlueprintName = "SwiftSerializer"
                ReferencedContainer = "container:swift-serializer.xcodeproj">
@@ -26,7 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -42,7 +43,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA949BC61BE8630800F02242"
+            BlueprintIdentifier = "AA949BD71BE8649C00F02242"
             BuildableName = "SwiftSerializer.framework"
             BlueprintName = "SwiftSerializer"
             ReferencedContainer = "container:swift-serializer.xcodeproj">
@@ -64,7 +65,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA949BC61BE8630800F02242"
+            BlueprintIdentifier = "AA949BD71BE8649C00F02242"
             BuildableName = "SwiftSerializer.framework"
             BlueprintName = "SwiftSerializer"
             ReferencedContainer = "container:swift-serializer.xcodeproj">
@@ -82,7 +83,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AA949BC61BE8630800F02242"
+            BlueprintIdentifier = "AA949BD71BE8649C00F02242"
             BuildableName = "SwiftSerializer.framework"
             BlueprintName = "SwiftSerializer"
             ReferencedContainer = "container:swift-serializer.xcodeproj">

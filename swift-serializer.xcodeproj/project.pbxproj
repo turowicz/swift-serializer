@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A0D0F7693200A30EFB86C2C9 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7DC79ACBDEB6EFE03B9945E /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		AA03D4171C04294600AEDF77 /* Array+Serializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA03D4161C04294600AEDF77 /* Array+Serializable.swift */; };
 		AA949BE01BE864F000F02242 /* Serializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BC4FD81B4EE74200F52BA5 /* Serializable.swift */; };
 		D1BC4FE91B4EF09A00F52BA5 /* SerializableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BC4FE81B4EF09A00F52BA5 /* SerializableSpec.swift */; };
 /* End PBXBuildFile section */
@@ -26,6 +27,7 @@
 		78B06B35A0AD84EE359FB68B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		A490D88AB4032BDB8C50CDA0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A7DC79ACBDEB6EFE03B9945E /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA03D4161C04294600AEDF77 /* Array+Serializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Serializable.swift"; sourceTree = "<group>"; };
 		AA949BCB1BE8630800F02242 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA949BD81BE8649C00F02242 /* SwiftSerializer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftSerializer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1BC4FD81B4EE74200F52BA5 /* Serializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serializable.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 		D1BC4FD71B4EE72D00F52BA5 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				AA03D4161C04294600AEDF77 /* Array+Serializable.swift */,
 				D1BC4FD81B4EE74200F52BA5 /* Serializable.swift */,
 			);
 			path = src;
@@ -275,6 +278,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA03D4171C04294600AEDF77 /* Array+Serializable.swift in Sources */,
 				AA949BE01BE864F000F02242 /* Serializable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -518,6 +522,7 @@
 				AA949BDF1BE8649C00F02242 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D1BC4FD41B4EE6E600F52BA5 /* Build configuration list for PBXProject "swift-serializer" */ = {
 			isa = XCConfigurationList;
