@@ -7,23 +7,28 @@ Serializes an array to JSON making use of the Serializable class
 import Foundation
 
 extension Array where Element: Serializable {
+    
+    public func toNSDictionaryArray() -> [NSDictionary] {
+        var subArray = [NSDictionary]()
+        for item in self {
+            subArray.append(item.toDictionary())
+        }
+        return subArray
+    }
+    
     /**
     Converts the array to JSON.
     
     :returns: The array as JSON, wrapped in NSData.
     */
     public func toJson(prettyPrinted : Bool = false) -> NSData? {
-        var subArray = [NSDictionary]()
-        for item in self {
-            subArray.append(item.toDictionary())
-        }
+        let subArray = self.toNSDictionaryArray()
         
         if NSJSONSerialization.isValidJSONObject(subArray) {
             do {
                 let json = try NSJSONSerialization.dataWithJSONObject(subArray, options: (prettyPrinted ? .PrettyPrinted : NSJSONWritingOptions()))
                 return json
-            } catch {
-                //currently swift will not catch NSInvalidArgumentException exception
+            } catch let error as NSError {
                 print("ERROR: Unable to serialize json, error: \(error)")
             }
         }

@@ -60,19 +60,14 @@ public class Serializable: NSObject {
                 if let serializablePropValue = propValue as? Serializable {
                     setValue(propertiesDictionary, value: serializablePropValue.toDictionary(), forKey: propName)
                 } else if let arrayPropValue = propValue as? [Serializable] {
-                    var subArray = [NSDictionary]()
-                    for item in arrayPropValue {
-                        subArray.append(item.toDictionary())
-                    }
+                    let subArray = arrayPropValue.toNSDictionaryArray()
                     setValue(propertiesDictionary, value: subArray, forKey: propName)
-                } else if propValue is Int || propValue is Double || propValue is Float {
+                } else if propValue is Int || propValue is Double || propValue is Float || propValue is Bool {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
                 } else if let dataPropValue = propValue as? NSData {
                     setValue(propertiesDictionary, value: dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
                 } else if let datePropValue = propValue as? NSDate {
                     setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970, forKey: propName)
-                } else if let boolPropValue = propValue as? Bool {
-                    setValue(propertiesDictionary, value: boolPropValue, forKey: propName)
                 } else {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
                 }
@@ -120,7 +115,6 @@ public class Serializable: NSObject {
                 return json
             } catch let error as NSError {
                 print("ERROR: Unable to serialize json, error: \(error)")
-                NSNotificationCenter.defaultCenter().postNotificationName("CrashlyticsLogNotification", object: self, userInfo: ["string": "unable to serialize json, error: \(error)"])
             }
         }
 
