@@ -13,15 +13,15 @@ Supported objects:
 import Foundation
 
 public class Serializable: NSObject {
-    private class SortedDictionary : NSMutableDictionary {
+    private class SortedDictionary: NSMutableDictionary {
         var dictionary = [String: AnyObject]()
         
-        override var count : Int {
+        override var count: Int {
             return dictionary.count
         }
         
         override func keyEnumerator() -> NSEnumerator {
-            let sortedKeys : NSArray = dictionary.keys.sort()
+            let sortedKeys: NSArray = dictionary.keys.sort()
             return sortedKeys.objectEnumerator()
         }
         
@@ -30,8 +30,12 @@ public class Serializable: NSObject {
         }
         
         override func objectForKey(aKey: AnyObject) -> AnyObject? {
-            return dictionary[aKey as! String]
-        }        
+            if let key = aKey as? String {
+                return dictionary[key]
+            }
+            
+            return nil
+        }
     }
     
     
@@ -65,35 +69,28 @@ public class Serializable: NSObject {
                 } else if propValue is Int || propValue is Double || propValue is Float || propValue is Bool {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
                 } else if let dataPropValue = propValue as? NSData {
-                    setValue(propertiesDictionary, value: dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
+                    setValue(propertiesDictionary,
+                        value: dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
                 } else if let datePropValue = propValue as? NSDate {
                     setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970, forKey: propName)
                 } else {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
                 }
-            }
-            else if let propValue:Int8 = propValue as? Int8 {
+            } else if let propValue: Int8 = propValue as? Int8 {
                 setValue(propertiesDictionary, value: NSNumber(char: propValue), forKey: propName!)
-            }
-            else if let propValue:Int16 = propValue as? Int16 {
+            } else if let propValue: Int16 = propValue as? Int16 {
                 setValue(propertiesDictionary, value: NSNumber(short: propValue), forKey: propName!)
-            }
-            else if let propValue:Int32 = propValue as? Int32 {
+            } else if let propValue: Int32 = propValue as? Int32 {
                 setValue(propertiesDictionary, value: NSNumber(int: propValue), forKey: propName!)
-            }
-            else if let propValue:Int64 = propValue as? Int64 {
+            } else if let propValue: Int64 = propValue as? Int64 {
                 setValue(propertiesDictionary, value: NSNumber(longLong: propValue), forKey: propName!)
-            }
-            else if let propValue:UInt8 = propValue as? UInt8 {
+            } else if let propValue: UInt8 = propValue as? UInt8 {
                 setValue(propertiesDictionary, value: NSNumber(unsignedChar: propValue), forKey: propName!)
-            }
-            else if let propValue:UInt16 = propValue as? UInt16 {
+            } else if let propValue: UInt16 = propValue as? UInt16 {
                 setValue(propertiesDictionary, value: NSNumber(unsignedShort: propValue), forKey: propName!)
-            }
-            else if let propValue:UInt32 = propValue as? UInt32 {
+            } else if let propValue: UInt32 = propValue as? UInt32 {
                 setValue(propertiesDictionary, value: NSNumber(unsignedInt: propValue), forKey: propName!)
-            }
-            else if let propValue:UInt64 = propValue as? UInt64 {
+            } else if let propValue: UInt64 = propValue as? UInt64 {
                 setValue(propertiesDictionary, value: NSNumber(unsignedLongLong: propValue), forKey: propName!)
             }
         }
@@ -106,12 +103,12 @@ public class Serializable: NSObject {
 
     - returns: The class as JSON, wrapped in NSData.
     */
-    public func toJson(prettyPrinted : Bool = false) -> NSData? {
+    public func toJson(prettyPrinted: Bool = false) -> NSData? {
         let dictionary = self.toDictionary()
 
         if NSJSONSerialization.isValidJSONObject(dictionary) {
             do {
-                let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: (prettyPrinted ? .PrettyPrinted : NSJSONWritingOptions()))
+                let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: (prettyPrinted ? .PrettyPrinted: NSJSONWritingOptions()))
                 return json
             } catch let error as NSError {
                 print("ERROR: Unable to serialize json, error: \(error)")
@@ -126,7 +123,7 @@ public class Serializable: NSObject {
 
     - returns: The class as a JSON string.
     */
-    public func toJsonString(prettyPrinted : Bool = false) -> String? {
+    public func toJsonString(prettyPrinted: Bool = false) -> String? {
         if let jsonData = self.toJson(prettyPrinted) {
             return NSString(data: jsonData, encoding: NSUTF8StringEncoding) as String?
         }
@@ -140,7 +137,7 @@ public class Serializable: NSObject {
 
     - returns: The unwrapped object.
     */
-    func unwrap(any:Any) -> Any? {
+    func unwrap(any: Any) -> Any? {
         
         let mi = Mirror(reflecting: any)
         if mi.displayStyle != .Optional {
