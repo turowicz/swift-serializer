@@ -1,0 +1,11 @@
+disabled_rules:
+  - trailing_whitespace
+  - variable_name_min_length
+included:
+
+excluded:
+  - Pods
+
+line_length: 150
+
+
