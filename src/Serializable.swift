@@ -92,6 +92,8 @@ public class Serializable: NSObject {
                 setValue(propertiesDictionary, value: NSNumber(unsignedInt: propValue), forKey: propName!)
             } else if let propValue: UInt64 = propValue as? UInt64 {
                 setValue(propertiesDictionary, value: NSNumber(unsignedLongLong: propValue), forKey: propName!)
+            } else if isEnum(propValue) {
+                setValue(propertiesDictionary, value: "\(propValue)", forKey: propName!)
             }
         }
 
@@ -138,7 +140,6 @@ public class Serializable: NSObject {
     - returns: The unwrapped object.
     */
     func unwrap(any: Any) -> Any? {
-        
         let mi = Mirror(reflecting: any)
         if mi.displayStyle != .Optional {
             return any
@@ -147,5 +148,9 @@ public class Serializable: NSObject {
         if mi.children.count == 0 { return nil }
         let (_, some) = mi.children.first!
         return some
+    }
+    
+    func isEnum(any: Any) -> Bool {
+        return Mirror(reflecting: any).displayStyle == .Enum
     }
 }

@@ -85,6 +85,18 @@ class UnsignedStock: Serializable {
     }
 }
 
+enum HeroType: String {
+    case First, Second
+}
+
+class Hero: Serializable {
+    var type: HeroType
+    
+    init(type: HeroType) {
+        self.type = type
+    }
+}
+
 class SerializableSpec: QuickSpec {
     let john = Person(name: "John", surname: "Doe", birthTimestamp: 51246360, birthDate: NSDate(timeIntervalSince1970: 10), hasPets: true)
 
@@ -172,6 +184,20 @@ class SerializableArraySpec: QuickSpec {
             it("should be serialized") {
                 let expected = "[{\"kind\":\"Dog\",\"nickname\":\"Fluffy\",\"trick\":\"Rollover\"},{\"kind\":\"Cat\",\"nickname\":\"Purry\"}]"
                 expect(animals.toJsonString()).to(equal(expected))
+            }
+        }
+    }
+}
+
+
+class SerializableEnumSpec: QuickSpec {
+    override func spec() {
+        describe("Enum") {
+            let hero = Hero(type:HeroType.First)
+            
+            it("should be serialized") {
+                let expected = "{\"type\":\"First\"}"
+                expect(hero.toJsonString()).to(equal(expected))
             }
         }
     }
