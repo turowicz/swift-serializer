@@ -92,7 +92,7 @@ public class Serializable: NSObject {
                 setValue(propertiesDictionary, value: NSNumber(unsignedInt: propValue), forKey: propName!)
             } else if let propValue: UInt64 = propValue as? UInt64 {
                 setValue(propertiesDictionary, value: NSNumber(unsignedLongLong: propValue), forKey: propName!)
-            } else if isEnum(propValue){
+            } else if isEnum(propValue) {
                 setValue(propertiesDictionary, value: "\(propValue)", forKey: propName!)
             }
         }
@@ -150,7 +150,7 @@ public class Serializable: NSObject {
         return some
     }
     
-    func isEnum(any : Any) -> Bool {
+    func isEnum(any: Any) -> Bool {
         return Mirror(reflecting: any).displayStyle == .Enum
     }
 }
