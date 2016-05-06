@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "SwiftSerializer"
-  s.version      = "0.5"
+  s.version      = "0.6"
   s.summary      = "Swift Strong Type Object Serialization to JSON"
   s.homepage     = "https://github.com/Mailcloud/swift-serializer"
   s.license      = { :type => "MIT", :file => "LICENSE"}
