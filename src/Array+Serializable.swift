@@ -8,10 +8,10 @@ import Foundation
 
 extension Array where Element: Serializable {
     
-    public func toNSDictionaryArray() -> [NSDictionary] {
+    public func toNSDictionaryArray(dateFormatter: NSDateFormatter?) -> [NSDictionary] {
         var subArray = [NSDictionary]()
         for item in self {
-            subArray.append(item.toDictionary())
+            subArray.append(item.toDictionary(dateFormatter))
         }
         return subArray
     }
@@ -21,8 +21,8 @@ extension Array where Element: Serializable {
     
     :returns: The array as JSON, wrapped in NSData.
     */
-    public func toJson(prettyPrinted: Bool = false) -> NSData? {
-        let subArray = self.toNSDictionaryArray()
+    public func toJson(prettyPrinted: Bool = false, dateFormatter: NSDateFormatter? = nil) -> NSData? {
+        let subArray = self.toNSDictionaryArray(dateFormatter)
         
         if NSJSONSerialization.isValidJSONObject(subArray) {
             do {
@@ -41,8 +41,8 @@ extension Array where Element: Serializable {
     
     :returns: The array as a JSON string.
     */
-    public func toJsonString(prettyPrinted: Bool = false) -> String? {
-        if let jsonData = toJson(prettyPrinted) {
+    public func toJsonString(prettyPrinted: Bool = false, dateFormatter: NSDateFormatter? = nil) -> String? {
+        if let jsonData = toJson(prettyPrinted, dateFormatter: dateFormatter) {
             return NSString(data: jsonData, encoding: NSUTF8StringEncoding) as String?
         }
         
