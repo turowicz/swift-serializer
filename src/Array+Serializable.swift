@@ -41,8 +41,8 @@ extension Array where Element: Serializable {
     
     :returns: The array as a JSON string.
     */
-    public func toJsonString(prettyPrinted: Bool = false) -> String? {
-        if let jsonData = toJson(prettyPrinted) {
+    public func toJsonString(prettyPrinted: Bool = false, dateFormatter: NSDateFormatter? = nil) -> String? {
+        if let jsonData = toJson(prettyPrinted, dateFormatter: dateFormatter) {
             return NSString(data: jsonData, encoding: NSUTF8StringEncoding) as String?
         }
         
