@@ -56,15 +56,15 @@ public class Serializable: NSObject {
 
     - returns: The class as an NSDictionary.
     */
-    public func toDictionary() -> NSDictionary {
+    public func toDictionary(dateFormatter: NSDateFormatter?) -> NSDictionary {
         let propertiesDictionary = SortedDictionary()
         let mirror = Mirror(reflecting: self)
         for (propName, propValue) in mirror.children {
             if let propValue: AnyObject = self.unwrap(propValue) as? AnyObject, propName = propName {
                 if let serializablePropValue = propValue as? Serializable {
-                    setValue(propertiesDictionary, value: serializablePropValue.toDictionary(), forKey: propName)
+                    setValue(propertiesDictionary, value: serializablePropValue.toDictionary(dateFormatter), forKey: propName)
                 } else if let arrayPropValue = propValue as? [Serializable] {
-                    let subArray = arrayPropValue.toNSDictionaryArray()
+                    let subArray = arrayPropValue.toNSDictionaryArray(dateFormatter)
                     setValue(propertiesDictionary, value: subArray, forKey: propName)
                 } else if propValue is Int || propValue is Double || propValue is Float || propValue is Bool {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
@@ -72,7 +72,11 @@ public class Serializable: NSObject {
                     setValue(propertiesDictionary,
                         value: dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
                 } else if let datePropValue = propValue as? NSDate {
-                    setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970, forKey: propName)
+                    if let dateFormatter = dateFormatter {
+                        setValue(propertiesDictionary, value: dateFormatter.stringFromDate(datePropValue), forKey: propName)
+                    } else {
+                        setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970, forKey: propName)
+                    }
                 } else {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
                 }
@@ -105,8 +109,8 @@ public class Serializable: NSObject {
 
     - returns: The class as JSON, wrapped in NSData.
     */
-    public func toJson(prettyPrinted: Bool = false) -> NSData? {
-        let dictionary = self.toDictionary()
+    public func toJson(prettyPrinted: Bool = false, dateFormatter: NSDateFormatter? = nil) -> NSData? {
+        let dictionary = self.toDictionary(dateFormatter)
 
         if NSJSONSerialization.isValidJSONObject(dictionary) {
             do {
@@ -125,8 +129,8 @@ public class Serializable: NSObject {
 
     - returns: The class as a JSON string.
     */
-    public func toJsonString(prettyPrinted: Bool = false) -> String? {
-        if let jsonData = self.toJson(prettyPrinted) {
+    public func toJsonString(prettyPrinted: Bool = false, dateFormatter: NSDateFormatter? = nil) -> String? {
+        if let jsonData = self.toJson(prettyPrinted, dateFormatter: dateFormatter) {
             return NSString(data: jsonData, encoding: NSUTF8StringEncoding) as String?
         }
 
