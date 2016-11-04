@@ -12,42 +12,41 @@ Supported objects:
 
 import Foundation
 
-public class Serializable: NSObject {
-    private class SortedDictionary: NSMutableDictionary {
-        var dictionary = [String: AnyObject]()
-        
+open class Serializable: NSObject {
+    fileprivate class SortedDictionary: NSMutableDictionary {
+        var sortedDictionary = [String: AnyObject]()
+
         override var count: Int {
-            return dictionary.count
+            return sortedDictionary.count
         }
-        
+
         override func keyEnumerator() -> NSEnumerator {
-            let sortedKeys: NSArray = dictionary.keys.sort()
+            let sortedKeys: NSArray = sortedDictionary.keys.sorted() as NSArray
             return sortedKeys.objectEnumerator()
         }
-        
-        override func setValue(value: AnyObject?, forKey key: String) {
-            dictionary[key] = value
+
+        override func setValue(_ value: Any?, forKey key: String) {
+            sortedDictionary[key] = value as AnyObject?
         }
-        
-        override func objectForKey(aKey: AnyObject) -> AnyObject? {
+
+        override func object(forKey aKey: Any) -> Any? {
             if let key = aKey as? String {
-                return dictionary[key]
+                return sortedDictionary[key]
             }
-            
+
             return nil
         }
     }
-    
-    
-    public func formatKey(key: String) -> String {
+
+    open func formatKey(_ key: String) -> String {
         return key
     }
     
-    public func formatValue(value: AnyObject?, forKey: String) -> AnyObject? {
+    open func formatValue(_ value: AnyObject?, forKey: String) -> AnyObject? {
         return value
     }
     
-    func setValue(dictionary: NSDictionary, value: AnyObject?, forKey: String) {
+    func setValue(_ dictionary: NSDictionary, value: AnyObject?, forKey: String) {
         dictionary.setValue(formatValue(value, forKey: forKey), forKey: formatKey(forKey))
     }
     
@@ -56,47 +55,47 @@ public class Serializable: NSObject {
 
     - returns: The class as an NSDictionary.
     */
-    public func toDictionary() -> NSDictionary {
+    open func toDictionary() -> NSDictionary {
         let propertiesDictionary = SortedDictionary()
         let mirror = Mirror(reflecting: self)
         for (propName, propValue) in mirror.children {
-            if let propValue: AnyObject = self.unwrap(propValue) as? AnyObject, propName = propName {
+            let propValue = self.unwrap(propValue) as AnyObject
+            if let propName = propName {
                 if let serializablePropValue = propValue as? Serializable {
                     setValue(propertiesDictionary, value: serializablePropValue.toDictionary(), forKey: propName)
                 } else if let arrayPropValue = propValue as? [Serializable] {
                     let subArray = arrayPropValue.toNSDictionaryArray()
-                    setValue(propertiesDictionary, value: subArray, forKey: propName)
+                    setValue(propertiesDictionary, value: subArray as AnyObject?, forKey: propName)
                 } else if propValue is Int || propValue is Double || propValue is Float || propValue is Bool {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
-                } else if let dataPropValue = propValue as? NSData {
+                } else if let dataPropValue = propValue as? Data {
                     setValue(propertiesDictionary,
-                        value: dataPropValue.base64EncodedStringWithOptions(.Encoding64CharacterLineLength), forKey: propName)
-                } else if let datePropValue = propValue as? NSDate {
-                    setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970, forKey: propName)
+                             value: dataPropValue.base64EncodedString(options: .lineLength64Characters) as AnyObject?, forKey: propName)
+                } else if let datePropValue = propValue as? Date {
+                    setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970 as AnyObject?, forKey: propName)
                 } else {
                     setValue(propertiesDictionary, value: propValue, forKey: propName)
                 }
             } else if let propValue: Int8 = propValue as? Int8 {
-                setValue(propertiesDictionary, value: NSNumber(char: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as Int8), forKey: propName!)
             } else if let propValue: Int16 = propValue as? Int16 {
-                setValue(propertiesDictionary, value: NSNumber(short: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as Int16), forKey: propName!)
             } else if let propValue: Int32 = propValue as? Int32 {
-                setValue(propertiesDictionary, value: NSNumber(int: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as Int32), forKey: propName!)
             } else if let propValue: Int64 = propValue as? Int64 {
-                setValue(propertiesDictionary, value: NSNumber(longLong: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as Int64), forKey: propName!)
             } else if let propValue: UInt8 = propValue as? UInt8 {
-                setValue(propertiesDictionary, value: NSNumber(unsignedChar: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as UInt8), forKey: propName!)
             } else if let propValue: UInt16 = propValue as? UInt16 {
-                setValue(propertiesDictionary, value: NSNumber(unsignedShort: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as UInt16), forKey: propName!)
             } else if let propValue: UInt32 = propValue as? UInt32 {
-                setValue(propertiesDictionary, value: NSNumber(unsignedInt: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as UInt32), forKey: propName!)
             } else if let propValue: UInt64 = propValue as? UInt64 {
-                setValue(propertiesDictionary, value: NSNumber(unsignedLongLong: propValue), forKey: propName!)
+                setValue(propertiesDictionary, value: NSNumber(value: propValue as UInt64), forKey: propName!)
             } else if isEnum(propValue) {
-                setValue(propertiesDictionary, value: "\(propValue)", forKey: propName!)
+                setValue(propertiesDictionary, value: "\(propValue)" as AnyObject?, forKey: propName!)
             }
         }
-
         return propertiesDictionary
     }
 
@@ -105,18 +104,16 @@ public class Serializable: NSObject {
 
     - returns: The class as JSON, wrapped in NSData.
     */
-    public func toJson(prettyPrinted: Bool = false) -> NSData? {
+    public func toJson(_ prettyPrinted: Bool = false) -> Data? {
         let dictionary = self.toDictionary()
-
-        if NSJSONSerialization.isValidJSONObject(dictionary) {
+        if JSONSerialization.isValidJSONObject(dictionary) {
             do {
-                let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: (prettyPrinted ? .PrettyPrinted: NSJSONWritingOptions()))
-                return json
+                let options = prettyPrinted ? .prettyPrinted: JSONSerialization.WritingOptions()
+                return try JSONSerialization.data(withJSONObject: dictionary, options: options)
             } catch let error as NSError {
                 print("ERROR: Unable to serialize json, error: \(error)")
             }
         }
-
         return nil
     }
 
@@ -125,11 +122,11 @@ public class Serializable: NSObject {
 
     - returns: The class as a JSON string.
     */
-    public func toJsonString(prettyPrinted: Bool = false) -> String? {
+    public func toJsonString(_ prettyPrinted: Bool = false) -> String? {
         if let jsonData = self.toJson(prettyPrinted) {
-            return NSString(data: jsonData, encoding: NSUTF8StringEncoding) as String?
+            let encoding = String.Encoding.utf8.rawValue
+            return NSString(data: jsonData, encoding: encoding) as String?
         }
-
         return nil
     }
     
@@ -139,18 +136,19 @@ public class Serializable: NSObject {
 
     - returns: The unwrapped object.
     */
-    func unwrap(any: Any) -> Any? {
+    func unwrap(_ any: Any) -> Any? {
         let mi = Mirror(reflecting: any)
-        if mi.displayStyle != .Optional {
+        if mi.displayStyle != .optional {
             return any
         }
-        
+
         if mi.children.count == 0 { return nil }
         let (_, some) = mi.children.first!
         return some
     }
-    
-    func isEnum(any: Any) -> Bool {
-        return Mirror(reflecting: any).displayStyle == .Enum
+
+    func isEnum(_ any: Any) -> Bool {
+        let displayStyle = Mirror(reflecting: any).displayStyle
+        return displayStyle == .enum
     }
 }
