@@ -55,7 +55,7 @@ open class Serializable: NSObject {
 
     - returns: The class as an NSDictionary.
     */
-    open func toDictionary() -> NSDictionary {
+    public func toDictionary() -> NSDictionary {
         let propertiesDictionary = SortedDictionary()
         let mirror = Mirror(reflecting: self)
         for (propName, propValue) in mirror.children {
