@@ -74,7 +74,12 @@ open class Serializable: NSObject {
                 } else if let datePropValue = propValue as? Date {
                     setValue(propertiesDictionary, value: datePropValue.timeIntervalSince1970 as AnyObject?, forKey: propName)
                 } else {
-                    setValue(propertiesDictionary, value: propValue, forKey: propName)
+                    switch propValue {
+                    case let rawEnum as RawRepresentable:
+                        setValue(propertiesDictionary, value: "\(rawEnum)" as AnyObject?, forKey: propName)
+                    default:
+                        setValue(propertiesDictionary, value: propValue, forKey: propName)
+                    }
                 }
             } else if let propValue: Int8 = propValue as? Int8 {
                 setValue(propertiesDictionary, value: NSNumber(value: propValue as Int8), forKey: propName!)
