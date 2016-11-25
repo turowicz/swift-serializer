@@ -1,7 +1,7 @@
-# Podfile
-
-link_with 'Tests'
-
 use_frameworks!
-pod 'Quick', '~> 0.9.2'
-pod 'Nimble', '~> 4.0.0'
+platform :ios, '9.0'
+
+target 'Tests' do
+  pod 'Quick', '~> 0.10.0'
+  pod 'Nimble', '~> 5.0.0'
+end

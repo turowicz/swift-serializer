@@ -86,7 +86,7 @@ class UnsignedStock: Serializable {
 }
 
 enum HeroType: String {
-    case First, Second
+    case first, second
 }
 
 class Hero: Serializable {
@@ -118,7 +118,7 @@ class SerializableSpec: QuickSpec {
                     
                     let johnString = "\"birthDate\":10,\"birthTimestamp\":51246360,\"hasPets\":true,\"name\":\"John\",\"surname\":\"Doe\""
                     let fluffyString = "{\"kind\":\"Dog\",\"nickname\":\"Fluffy\",\"trick\":\"Rollover\"}"
-                    let purryString = "{\"kind\":\"Cat\",\"nickname\":\"Purry\"}"
+                    let purryString = "{\"kind\":\"Cat\",\"nickname\":\"Purry\",\"trick\":null}"
                     let expected = "{\"animals\":[\(fluffyString),\(purryString)],\(johnString)}"
                     expect(self.john.toJsonString()).to(equal(expected))
                 }
@@ -182,7 +182,7 @@ class SerializableArraySpec: QuickSpec {
             }
             
             it("should be serialized") {
-                let expected = "[{\"kind\":\"Dog\",\"nickname\":\"Fluffy\",\"trick\":\"Rollover\"},{\"kind\":\"Cat\",\"nickname\":\"Purry\"}]"
+                let expected = "[{\"kind\":\"Dog\",\"nickname\":\"Fluffy\",\"trick\":\"Rollover\"},{\"kind\":\"Cat\",\"nickname\":\"Purry\",\"trick\":null}]"
                 expect(animals.toJsonString()).to(equal(expected))
             }
         }
@@ -193,10 +193,10 @@ class SerializableArraySpec: QuickSpec {
 class SerializableEnumSpec: QuickSpec {
     override func spec() {
         describe("Enum") {
-            let hero = Hero(type:HeroType.First)
+            let hero = Hero(type: .first)
             
             it("should be serialized") {
-                let expected = "{\"type\":\"First\"}"
+                let expected = "{\"type\":\"first\"}"
                 expect(hero.toJsonString()).to(equal(expected))
             }
         }
